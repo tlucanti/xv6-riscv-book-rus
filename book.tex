@@ -1,5 +1,9 @@
 \documentclass[12pt]{book}
-\usepackage[T1]{fontenc}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+
 \usepackage{times}
 \usepackage{listings}
 \usepackage{graphicx}
@@ -12,7 +16,6 @@
 \usepackage{etoolbox}  % for showidx
 \usepackage{fullpage}
 \usepackage{soul}
-\usepackage[utf8]{inputenc}
 
 \usepackage{hyperref}  % should be last
 
@@ -21,7 +24,7 @@
 
 \hypersetup{pdfauthor={Russ Cox, Frans Kaashoek, Robert Morris},
             pdftitle={xv6: a simple, Unix-like teaching operating system},}
-  
+
 \lstset{basicstyle=\small\ttfamily}
 \lstset{morecomment=[is]{[[[}{]]]}}
 \lstset{escapeinside={(*@}{@*)}}
