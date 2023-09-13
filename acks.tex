@@ -1,35 +1,35 @@
-\chapter*{Foreword and acknowledgments}
+\chapter*{Предисловие и благодарности}
 
+Это перевод на русский язык чернового текста книги, предназначенной для занятий
+по операционным системам. В ней рассказываются основные концепции операционных
+систем на примере ядра под названием xv6. Xv6 создано по образцу Unix 6 (v6)
+Денниса Ричи и Кена Томпсона .(v6)~\cite{unix}. Ядро xv6 в общих чертах
+повторяет структуру и стиль v6, но реализовано согласно стандарту ANSI
+C~\cite{kernighan} для многоядерных RISC-V процессоров~\cite{kernighan}.
 
-This is a draft text intended for a class on operating systems. It
-explains the main concepts of operating systems by studying an example
-kernel, named xv6.  Xv6 is modeled on Dennis Ritchie's and
-Ken Thompson's Unix Version 6 (v6)~\cite{unix}.  Xv6 loosely follows the structure
-and style of v6, but is implemented in ANSI C~\cite{kernighan} for 
-a multi-core RISC-V~\cite{riscv}.
+Эту книгу следует читать параллельно с исходным кодом ядра xv6, руководствуясь
+подходом, вдохновленным комментарием Джона Лайонса к 6-му изданию
+UNIX~\cite{lions}. Ресурсы по v6 и xv6, включая лабораторные задания с
+использованием xv6, можно найти по адресу
+\url{https://pdos.csail.mit.edu/6.1810}.
 
-This text should be read along with the source code for xv6, an approach 
-inspired by John Lions' Commentary on UNIX 6th Edition~\cite{lions}. See
-\url{https://pdos.csail.mit.edu/6.1810} for pointers to on-line
-resources for v6 and xv6, including several lab assignments
-using xv6.
+Эта книга использовалась в курсах по операционным системам 6.828 и 6.1810 в
+Массачусетском технологическом институте (MIT). Мы благодарим преподавательский
+состав, научных сотрудников и студентов этих курсов, которые прямо или косвенно
+внесли свой вклад в развитие xv6. В частности, мы хотели бы поблагодарить
+Адама Белая, Остина Клементса и Николая Зельдовича. Наконец, мы хотели бы
+поблагодарить людей, приславших нам письма об ошибках в тексте или предложениях
+по его улучшению: Абуталиба Агаева, Себастьяна Бема, brandb97, Антона Бурцева,
+Рафаэля Карвальо, Тедж Чаджеда, Расита Эскичиоглу, Color Fuzzy, Войцеха Гака,
+Джузеппе, Тао Гуо, Хайбо Хао, Наоки Хаямы, Криса Хендерсона, Роберта Хилдермана,
+Эдена Хохбаума, Вольфганга Келлера, Генри Лайха, Джина Ли, Остина Лью,
+Павана Маддамсетти, Яцека Масиуляниека, Майкла Макконвиля, m3hm00d,
+miguelgvieira, Марка Моррисси, Мухаммеда Мурада, Гарри Пана, Гарри Портера,
+Сиюань Цяна, Аскара Сафина, Салмана Шаха, Хуан Ша, Викрама Шеноя,
+Адеодато Симо, Руслана Савченко, Павла Щурко, Уоррена Туми, tyfkda, tzerbib,
+Вануша Васвани, Си Ванга и Чанга Вей, Сэма Уитлока, Люси Шоу Ян и Мэн Чжоу.
 
-We have used this text in 6.828 and 6.1810, the operating system
-classes at MIT.  We thank the faculty, teaching assistants, and
-students of those classes who have all directly or indirectly
-contributed to xv6.  In particular, we would like to thank Adam Belay,
-Austin Clements, and Nickolai Zeldovich.  Finally, we would like to
-thank people who emailed us bugs in the text or suggestions for
-improvements: Abutalib Aghayev, Sebastian Boehm, brandb97, Anton
-Burtsev, Raphael Carvalho, Tej Chajed, Rasit Eskicioglu, Color Fuzzy,
-Wojciech Gac, Giuseppe, Tao Guo, Haibo Hao, Naoki Hayama, Chris
-Henderson, Robert Hilderman, Eden Hochbaum, Wolfgang Keller, Henry
-Laih, Jin Li, Austin Liew, Pavan Maddamsetti, Jacek Masiulaniec,
-Michael McConville, m3hm00d, miguelgvieira, Mark Morrissey, Muhammed
-Mourad, Harry Pan, Harry Porter, Siyuan Qian, Askar Safin, Salman
-Shah, Huang Sha, Vikram Shenoy,  Adeodato Simó, Ruslan Savchenko, Pawel Szczurko,
-Warren Toomey, tyfkda, tzerbib, Vanush Vaswani, Xi Wang, and Zou Chang
-Wei, Sam Whitlock, LucyShawYang, and Meng Zhou
-
-If you spot errors or have suggestions for improvement, please send email to
-Frans Kaashoek and Robert Morris (kaashoek,rtm@csail.mit.edu).
+Если вы заметили ошибки или у вас есть предложения по улучшению, пожалуйста,
+Франсу Каашуку и Роберту Моррису,
+(kaashoekrtm@csail.mit.edu, rtm@csail.mit.edu), или автору перевода
+(prototype3628800@yandex.ru).
