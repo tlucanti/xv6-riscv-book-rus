@@ -1,28 +1,43 @@
-\chapter{Operating system interfaces}
+\chapter{Интерфейсы операционной системы}
 \label{CH:UNIX}
 
-The job of an operating system is to share a computer among
-multiple programs and to provide a more useful set of services
-than the hardware alone supports.
-An operating system manages and abstracts
-the low-level hardware, so that, for example,
-a word processor need not concern itself with which type
-of disk hardware is being used.
-An operating system shares the hardware among multiple programs so
-that they run (or appear to run) at the same time.
-Finally, operating systems provide controlled ways for programs
-to interact, so that they can share data or work together.
+Работа операционной системы заключается в разделении
+компьютера между несколькими программами и предоставлении
+более практичного набора сервисов, чем это обеспечивает
+аппаратное обеспечение в одиночку.
+Операционная система управляет и абстрагирует
+аппаратное обеспечение низкого уровня.
+Таким образом, например, текстовый процессор не должен
+беспокоиться о том, какой тип дискового оборудования используется.
+Операционная система разделяет аппаратное обеспечение
+между несколькими программами, чтобы они работали
+(или казались работающими) одновременно.
+Наконец, операционные системы предоставляют контролируемые способы
+взаимодействия программ, с помощью котоорых они могут
+обмениваться данными и работать вместе.
 
-An operating system provides services to user programs through an interface.
+Операционная система предоставляет сервисы пользовательским
+программам через интерфейс.
 \index{interface design}
-Designing a good interface turns out to be
-difficult.  On the one hand, we would like the interface to be
-simple and narrow because that makes it easier to get the
-implementation right.  On the other hand,
-we may be tempted to offer many sophisticated features to applications.
-The trick in
-resolving this tension is to design interfaces that rely on a few
-mechanisms that can be combined to provide much generality.
+И, оказывается, что разработка хорошего интерфейса является
+сложной задачей. С одной стороны, желательно, чтобы интерфейс был
+простым и компактным, потому что это облегчает правильную реализацию.
+С другой стороны, соблазнительно расширить функционал
+замудренными возможностями.
+Хитрость в разрешении этого противоречия заключается
+в разработке интерфейсов, которые базируются на нескольких простых
+механизмах, которые могут быть комбинированы для обеспечения
+большой общности и абстракции.
+
+Эта книга использует единственную операционную систему
+в качестве конкретного примера, чтобы проиллюстрировать
+концепции операционных систем.
+Данная операционная система (xv6) предоставляет базовые интерфейсы,
+предложенные операционной системой Unix~\cite{unix}
+Кена Томпсона и Денниса Ритчи, а также имитирует внутреннее устройство Unix.
+Unix обеспечивает компактный интерфейс, механизмы которого
+удобно комбинируются, предоставляя поразительную общность. Этот интерфейс был настолько успешен, что современные операционные системы - BSD, Linux, macOS, Solaris и даже, в меньшей степени, Microsoft Windows - имеют похожие на Unix интерфейсы.
+Понимание xv6 - это хороший старт для понимания любой из этих систем и многих других.
 
 This book uses a single operating system as a concrete example to
 illustrate operating system concepts.  That operating system,
@@ -36,7 +51,9 @@ lesser extent, Microsoft Windows—have Unix-like interfaces.
 Understanding xv6 is a good start toward understanding any of these
 systems and many others.
 
-As 
+Как показано на рисунке, xv6 имеет традиционную форму ядра, специальной программы, которая предоставляет сервисы работающим программам. Каждая работающая программа, называемая процессом, имеет память, содержащую инструкции, данные и стек. Инструкции реализуют вычисления программы. Данные - это переменные, над которыми выполняются вычисления. Стек организует вызовы процедур программы. На одном компьютере обычно работает много процессов, но только одно ядро.
+
+As
 Figure~\ref{fig:os} shows,
 xv6 takes the traditional form of a
 \indextext{kernel},
@@ -52,7 +69,7 @@ A given computer typically has many processes but only a single
 kernel.
 
 When a
-process needs to invoke a kernel service, it invokes 
+process needs to invoke a kernel service, it invokes
 a \indextext{system call},
 one of the calls
 in the operating system's interface.
@@ -90,13 +107,13 @@ function in the kernel.
 The collection of system calls that a kernel provides
 is the interface that user programs see.
 The xv6 kernel provides a subset of the services and system calls
-that Unix kernels traditionally offer.  
-Figure~\ref{fig:api} 
+that Unix kernels traditionally offer.
+Figure~\ref{fig:api}
 lists all of xv6's system calls.
 
 The rest of this chapter outlines xv6's services---processes, memory,
 file descriptors, pipes, and a file system---and illustrates them with
-code snippets and discussions of how the \indextext{shell}, 
+code snippets and discussions of how the \indextext{shell},
 Unix's command-line user interface, uses
 them. The shell's use of system calls illustrates how carefully they
 have been designed.
@@ -111,16 +128,16 @@ modern Unix systems have a variety of
 shells to choose from, each with its own user interface
 and scripting features.
 The xv6 shell is a simple implementation of the essence of
-the Unix Bourne shell.  Its implementation can be found at 
+the Unix Bourne shell.  Its implementation can be found at
 \lineref{user/sh.c:1}.
-%% 
+%%
 %% 	Processes and memory
-%% 
+%%
 \section{Processes and memory}
 
 An xv6 process consists of user-space memory (instructions, data, and stack)
 and per-process state private to the kernel.
-Xv6 
+Xv6
 \indextext{time-share}s
 processes: it transparently switches the available CPUs
 among the set of processes waiting to execute.
@@ -235,9 +252,9 @@ changing a variable in one does not affect the other. For example, when the
 return value of
 \lstinline{wait}
 is stored into
-\lstinline{pid} 
+\lstinline{pid}
 in the parent process,
-it doesn't change the variable 
+it doesn't change the variable
 \lstinline{pid}
 in the child.  The value of
 \lstinline{pid}
@@ -273,22 +290,22 @@ exec("/bin/echo", argv);
 printf("exec error\n");
 \end{lstlisting}
 This fragment replaces the calling program with an instance
-of the program 
+of the program
 \lstinline{/bin/echo}
 running with the argument list
 \lstinline{echo}
 \lstinline{hello}.
-Most programs ignore the first element of the argument array, which is 
+Most programs ignore the first element of the argument array, which is
 conventionally the name of the program.
 
 The xv6 shell uses the above calls to run programs on behalf of
 users. The main structure of the shell is simple; see
-\lstinline{main} 
+\lstinline{main}
 \lineref{user/sh.c:/main/}.
 The main loop reads a line of input from the user with
 \indexcode{getcmd}.
-Then it calls 
-\lstinline{fork}, 
+Then it calls
+\lstinline{fork},
 which creates a copy of the shell process. The
 parent calls
 \lstinline{wait},
@@ -300,26 +317,26 @@ to the shell,
 would have been called with
 ``\lstinline{echo hello}''
 as the argument.
-\lstinline{runcmd} 
+\lstinline{runcmd}
 \lineref{user/sh.c:/runcmd/}
 runs the actual command. For
 ``\lstinline{echo hello}'',
 it would call
-\lstinline{exec} 
+\lstinline{exec}
 \lineref{user/sh.c:/exec.ecmd/}.
 If
 \lstinline{exec}
 succeeds then the child will execute instructions from
 \lstinline{echo}
 instead of
-\lstinline{runcmd}.  
+\lstinline{runcmd}.
 At some point
 \lstinline{echo}
 will call
 \lstinline{exit},
 which will cause the parent to return from
 \lstinline{wait}
-in 
+in
 \lstinline{main}
 \lineref{user/sh.c:/main/}.
 
@@ -327,7 +344,7 @@ You might wonder why
 \indexcode{fork}
 and
 \indexcode{exec}
-are not combined in a single call; we will see later that 
+are not combined in a single call; we will see later that
 the shell exploits the separation in its implementation of
 I/O redirection.
 To avoid the wastefulness of
@@ -341,7 +358,7 @@ Xv6 allocates most user-space memory
 implicitly:
 \indexcode{fork}
 allocates the memory required for the child's copy of the
-parent's memory, and 
+parent's memory, and
 \indexcode{exec}
 allocates enough memory to hold the executable file.
 A process that needs more memory at run-time (perhaps for
@@ -354,13 +371,13 @@ bytes;
 \indexcode{sbrk}
 returns the location of the new memory.
 
-%% 
+%%
 %% 	I/O and File descriptors
-%% 
+%%
 \section{I/O and File descriptors}
 
-A 
-\indextext{file descriptor} 
+A
+\indextext{file descriptor}
 is a small integer representing a kernel-managed object
 that a process may read from or write to.
 A process may obtain a file descriptor by opening a file, directory,
@@ -464,13 +481,13 @@ for(;;){
 The important thing to note in the code fragment is that
 \lstinline{cat}
 doesn't know whether it is reading from a file, console, or a pipe.
-Similarly 
+Similarly
 \lstinline{cat}
 doesn't know whether it is printing to a console, a file, or whatever.
 The use of file descriptors and the convention that file descriptor 0
 is input and file descriptor 1 is output allows a simple
 implementation
-of 
+of
 \lstinline{cat}.
 
 The
@@ -482,7 +499,7 @@ releases a file descriptor, making it free for reuse by a future
 or
 \lstinline{dup}
 system call (see below).
-A newly allocated file descriptor 
+A newly allocated file descriptor
 is always the lowest-numbered unused
 descriptor of the current process.
 
@@ -530,8 +547,8 @@ sequence, since it modifies only the child's descriptors.
 The code for I/O redirection in the xv6 shell works in exactly this way
 \lineref{user/sh.c:/case.REDIR/}.
 Recall that at this point in the code the shell has already forked the
-child shell and that 
-\lstinline{runcmd} 
+child shell and that
+\lstinline{runcmd}
 will call
 \lstinline{exec}
 to load the new program.
@@ -554,8 +571,8 @@ and to truncate the file to zero length.
 
 Now it should be clear why it is helpful that
 \lstinline{fork}
-and 
-\lstinline{exec} 
+and
+\lstinline{exec}
 are separate calls: between the two, the shell has a chance
 to redirect the child's I/O without disturbing the I/O setup of the main shell.
 One could instead imagine a hypothetical combined
@@ -630,10 +647,10 @@ and
 \lstinline{dup}
 calls.
 Otherwise file descriptors do not share offsets, even if they
-resulted from 
+resulted from
 \lstinline{open}
-calls for the same file.  
-\lstinline{dup} 
+calls for the same file.
+\lstinline{dup}
 allows shells to implement commands like this:
 \lstinline{ls}
 \lstinline{existing-file}
@@ -655,13 +672,13 @@ File descriptors are a powerful abstraction,
 because they hide the details of what they are connected to:
 a process writing to file descriptor 1 may be writing to a
 file, to a device like the console, or to a pipe.
-%% 
+%%
 %% 	Pipes
-%% 
+%%
 \section{Pipes}
 
-A 
-\indextext{pipe} 
+A
+\indextext{pipe}
 is a small kernel buffer exposed to processes as a pair of
 file descriptors, one for reading and one for writing.
 Writing data to one end of the pipe
@@ -706,7 +723,7 @@ closes the file descriptors in
 \lstinline{p},
 and calls \lstinline{exec} to run
 \lstinline{wc}.
-When 
+When
 \lstinline{wc}
 reads from its standard input, it reads from the pipe.
 The parent closes the read side of the pipe,
@@ -743,7 +760,7 @@ with the right end. Then it calls
 and
 \lstinline{runcmd}
 for the left end of the pipeline
-and 
+and
 \lstinline{fork}
 and
 \lstinline{runcmd}
@@ -754,7 +771,7 @@ pipe (e.g.,
 \lstinline{|}
 \lstinline{b}
 \lstinline{|}
-\lstinline{c)}, 
+\lstinline{c)},
 which itself forks two new child processes (one for
 \lstinline{b}
 and one for
@@ -808,9 +825,9 @@ before the second starts.
 % Fourth, if you are implementing inter-process communication,
 % pipes' blocking reads and writes are more efficient
 % than the non-blocking semantics of files.
-%% 
+%%
 %% 	File system
-%% 
+%%
 \section{File system}
 
 The xv6 file system provides data files,
@@ -818,10 +835,10 @@ which contain uninterpreted byte arrays,
 and directories, which
 contain named references to data files and other directories.
 The directories form a tree, starting
-at a special directory called the 
+at a special directory called the
 \indextext{root}.
-A 
-\indextext{path} 
+A
+\indextext{path}
 like
 \lstinline{/a/b/c}
 refers to the file or directory named
@@ -873,7 +890,7 @@ mknod("/console", 1, 1);
 creates a special file that refers to a device.
 Associated with a device file are
 the major and minor device numbers
-(the two arguments to 
+(the two arguments to
 \lstinline{mknod}),
 which uniquely identify a kernel device.
 When a process later opens a device file, the kernel
@@ -885,10 +902,10 @@ system calls to the kernel device implementation
 instead of passing them to the file system.
 
 A file's name is distinct from the file itself;
-the same underlying file, called an 
-\indextext{inode}, 
+the same underlying file, called an
+\indextext{inode},
 can have multiple names,
-called 
+called
 \indextext{links}.
 Each link consists of an entry in a directory;
 the entry contains a file name and a reference
@@ -928,7 +945,7 @@ struct stat {
 
 The
 \lstinline{link}
-system call creates another file system name 
+system call creates another file system name
 referring to the same inode as an existing file.
 This fragment creates a new file named both
 \lstinline{a}
@@ -951,9 +968,9 @@ to determine that
 and
 \lstinline{b}
 refer to the same underlying contents by inspecting the
-result of 
+result of
 \lstinline{fstat}:
-both will return the same inode number 
+both will return the same inode number
 (\lstinline{ino}),
 and the
 \lstinline{nlink}
@@ -977,9 +994,9 @@ Furthermore,
 fd = open("/tmp/xyz", O_CREATE|O_RDWR);
 unlink("/tmp/xyz");
 \end{lstlisting}
-is an idiomatic way to create a temporary inode 
+is an idiomatic way to create a temporary inode
 with no name
-that will be cleaned up when the process closes 
+that will be cleaned up when the process closes
 \lstinline{fd}
 or exits.
 
@@ -1008,13 +1025,13 @@ process, the child process would run
 \lstinline{cd},
 and
 \lstinline{cd}
-would change the 
-\textit{child} 's 
+would change the
+\textit{child} 's
 working directory.  The parent's (i.e.,
 the shell's) working directory would not change.
-%% 
+%%
 %% 	Real world
-%% 
+%%
 \section{Real world}
 
 Unix's combination of ``standard'' file
@@ -1044,12 +1061,12 @@ drivers for many devices, and so on.  Modern kernels evolve continuously and
 rapidly, and offer many features beyond POSIX.
 
 Unix unified access to multiple types of resources (files,
-directories, and devices) with a single set of 
+directories, and devices) with a single set of
 file-name and file-descriptor interfaces.
 This idea can be extended to more kinds of resources;
 a good example is Plan 9~\cite{Presotto91plan9},
 which applied the ``resources are files''
-concept to 
+concept to
 networks, graphics, and more.
 However, most Unix-derived operating systems have
 not followed this route.
@@ -1089,7 +1106,7 @@ After studying xv6, you should be able to
 look at other, more complex operating systems
 and see the concepts underlying xv6 in those systems as well.
 
-%% 
+%%
 \section{Exercises}
 %%
 
