@@ -6,7 +6,7 @@
 в разделении компьютера между несколькими программами
 и предоставлении более практичного набора сервисов,
 чем это обеспечивает аппаратное обеспечение
-\empth{(англ. hardware)} в одиночку.
+\emph{(англ. hardware)} в одиночку.
 Операционная система управляет и абстрагирует
 аппаратное обеспечение низкого уровня.
 Таким образом, например,
@@ -56,123 +56,149 @@ BSD, Linux, macOS, Solaris и даже,
 любой из этих систем и многих других.
 
 Как показано на рисунке~\ref{fig:os},
-xv6 имеет традиционную форму ядра \emph{(kernel)} -
-\indextext{ядра}
-\indextext{kernel}
+xv6 имеет традиционную форму ядра \emph{(англ. kernel)} -
+\index{ядро}
+\index{kernel}
 специальной программы, которая предоставляет
 обслуживание работающим программам.
-Каждая работающая программа называется процессом (process).
-\indextext{процесс}
-\indextext{process}
-У каждого процесса свои: память, содержащую инструкции, данные и стек.
-Инструкции реализуют вычисления программы. Данные - это переменные,
+Каждая работающая программа называется процессом \emph{(англ. process)}.
+\index{процесс}
+\index{process}
+У каждого процесса свои:
+память, содержащую инструкции, данные и стек.
+Инструкции реализуют вычисления программы.
+Данные - это переменные,
 над которыми выполняются вычисления.
 Стек организует вызовы процедур программы.
 На одном компьютере обычно работает много процессов,
-но только одно ядро ОС.
+но только одно ядро операционной системы.
 
-As
-Figure~\ref{fig:os} shows,
-xv6 takes the traditional form of a
-\indextext{kernel},
-a special program that provides
-services to running programs.
-Each running program, called a
-\indextext{process},
-has memory containing instructions, data, and a stack. The
-instructions implement the
-program's computation.  The data are the variables on which
-the computation acts. The stack organizes the program's procedure calls.
-A given computer typically has many processes but only a single
-kernel.
+Когда процессу необходимо обратиться к ядру,
+он совершает системный вызов \emph{(англ. system call)}.
+\index{системный вызов}
+\index{system call}
+Системный вызов - это одна из возможностей обратиться
+к операционной системе через предоставленный интерфейс.
+Системный вызов выглядит как вызов
+подпрограммы или функции из системной библиотеки.
+При использовании, он входит в ядро,
+выполняет требуемую операцию и возвращается
+в то место откуда был вызван.
+Таким образом, процесс чередует исполнение
+в пользовательском пространстве \emph{(англ. user space)}
+и пространстве ядра \emph{(англ. kernel space)}.
+\index{пространство пользователя}
+\index{used space}
+\index{пространство ядра}
+\index{kernel space}
 
-When a
-process needs to invoke a kernel service, it invokes
-a \indextext{system call},
-one of the calls
-in the operating system's interface.
-The system call enters the kernel;
-the kernel performs the service and returns.
-Thus a process alternates between executing in
-\indextext{user space}
-and
-\indextext{kernel space}.
-
-As described in detail in subsequent chapters, the kernel uses the hardware protection mechanisms provided by a
-CPU\footnote{
-This text generally refers to the hardware element that executes a
-computation with the term \indextext{CPU}, an acronym for central
-processing unit.  Other documentation (e.g., the RISC-V specification)
-also uses the words processor, core, and hart instead of CPU.
+В последующих главах будет описано,
+как ядро использует механизмы аппаратной защиты,
+предоставляемые центральным процессором
+\footnote{
+  Этот термин в целом относится к аппаратному элементу,
+  выполняющему вычисления.
+  \index{ЦП}
+  \index{CPU}
+  В некоторых источниках (например, спецификации RISC-V)
+  также используются слова
+  процессор \emph{(англ. processor)},
+  ядро \emph{(англ. code)},
+  и сердце \emph{(англ. heart)} вместо ЦП.
 }
-to
-ensure that each process executing in user space can access only
-its own memory.
-The kernel executes with the hardware privileges required to
-implement these protections; user programs execute without
-those privileges.
-When a user program invokes a system call, the hardware
-raises the privilege level and starts executing a pre-arranged
-function in the kernel.
+\emph{(англ. central processor unit - CPU)},
+чтобы запретить доступ процессов к памяти,
+пренадлежащей другим процессам на компьютере.
+Ядро работает с необходимыми аппаратными привилегиями
+для реализации этих механизмов защиты.
+Пользовательские же программы выполняются без таких привилегий.
+Когда пользовательская программа
+совершает системный вызов,
+аппаратура повышает уровень привилегий
+и начинает выполнение специальной программы
+для подготовки переключения дальнейшего исполнения
+в пространстве ядра.
 
 \begin{figure}[t]
 \center
 \includegraphics[scale=0.5]{fig/os.pdf}
-\caption{A kernel and two user processes.}
+\caption{Ядро и два пользовательских процесса.}
 \label{fig:os}
 \end{figure}
 
-The collection of system calls that a kernel provides
-is the interface that user programs see.
-The xv6 kernel provides a subset of the services and system calls
-that Unix kernels traditionally offer.
-Figure~\ref{fig:api}
-lists all of xv6's system calls.
+Совокупность системных вызовов,
+которые предоставляет ядро,
+является интерфейсом,
+который видят пользовательские программы.
+Ядро xv6 предоставляет подмножество
+возможностей и системных вызовов,
+которые традиционно предоставляют ядра Unix.
+На рисунке~\ref{fig:api}
+перечислены все системные вызовы xv6.
 
-The rest of this chapter outlines xv6's services---processes, memory,
-file descriptors, pipes, and a file system---and illustrates them with
-code snippets and discussions of how the \indextext{shell},
-Unix's command-line user interface, uses
-them. The shell's use of system calls illustrates how carefully they
-have been designed.
+Остальная часть этой главы описывает
+сервисы xv6---процессы, память, дескрипторы файлов,
+каналы и файловую систему---и иллюстрирует их
+фрагментами кода и обсуждением того,
+как оболочка \emph{(англ. shell)}---
+\index{оболочка}
+\index{shell}
+пользовательский интерфейс командной строки UNIX, использует их.
+Применение системных вызовов оболочкой демонстрирует,
+насколько тщательно они были разработаны.
 
-The shell is an ordinary program that reads commands from the user
-and executes them.
-The fact that the shell is a user program, and not part of the kernel,
-illustrates the power of the system call interface: there is nothing
-special about the shell.
-It also means that the shell is easy to replace; as a result,
-modern Unix systems have a variety of
-shells to choose from, each with its own user interface
-and scripting features.
-The xv6 shell is a simple implementation of the essence of
-the Unix Bourne shell.  Its implementation can be found at
-\lineref{user/sh.c:1}.
+Оболочка - это обычная программа,
+которая читает команды от пользователя и выполняет их.
+Тот факт, что оболочка является
+пользовательской программой и не является частью ядра,
+иллюстрирует мощь интерфейса системных вызовов:
+в оболочке нет ничего особенного по сравнению
+с любыми другими пользовательскими процессами.
+Это также означает, что оболочку легко заменить.
+В результате в современных UNIX-системах
+доступно множество оболочек на выбор,
+каждая со своим пользовательским интерфейсом
+и возможностями скриптового языка.
+Оболочка xv6---это простая реализация
+оригинальной оболочки UNIX Bourne.
+Ее исходный код можно найти в файле \lineref{user/sh.c}.
+
 %%
 %% 	Processes and memory
 %%
-\section{Processes and memory}
+\section{Процессы и память}
 
-An xv6 process consists of user-space memory (instructions, data, and stack)
-and per-process state private to the kernel.
-Xv6
-\indextext{time-share}s
-processes: it transparently switches the available CPUs
-among the set of processes waiting to execute.
-When a process is not executing, xv6 saves the process's CPU registers,
-restoring them when it next runs the process.
-The kernel associates a process identifier, or
-\indexcode{PID},
-with each process.
+Процессы в xv6 состоят из пользовательской памяти
+(инструкций, данных и стека)
+и состояния процесса, хранящегося внутри ядра
+и недоступного для пользователя.
+Ядро xv6 выполняет разделение времени между процессами:
+оно автоматически переключает доступный процессор
+на один из процессов, ожидающих выполнения.
+Когда процесс не выполняется,
+xv6 сохраняет регистры ЦП процесса,
+восстанавливая их при следующем запуске процесса.
+Каждому процессу соответствует уникальный идентификатор процесса
+(англ. PID - process identifier)
+\index{идентификатор процесса}
+\index{process identifier}
+\index{PID}
+На одном процессоре выполняется всегда только один процесс.
+Другие процессы находятся в состоянии ожидания
+до тех пор пока ядро не решит переключить исполнение на них.
 
 \begin{figure}[t]
 \center
 \begin{tabular}{ll}
-{\bf System call} & {\bf Description} \\
+{\bf Системный вызов} & {\bf Описание} \\
 \midrule
-int fork() & Create a process, return child's PID. \\
-int exit(int status) & Terminate the current process; status reported to wait(). No return. \\
-int wait(int *status) & Wait for a child to exit; exit status in *status; returns child PID. \\
+int fork() & Создает новый процесс, возвращает идентификатор \\
+           & дочернего процесса. \\
+int exit(int status) & Завершает текущий процесс; статус возврата считывается \\
+                     & вызовом wait(). Функция не возвращается. \\
+int wait(int *status) & Ждет завершения дочернего процесса; статус возврата \\
+                      & ребенка помещается в *status. Возвращает идентификатор \\
+                      & процесса завершившегося ребенка. \\
 int kill(int pid) & Terminate process PID. Returns 0, or -1 for error. \\
 int getpid() & Return the current process's PID. \\
 int sleep(int n) & Pause for n clock ticks. \\
