@@ -192,31 +192,68 @@ xv6 сохраняет регистры ЦП процесса,
 \begin{tabular}{ll}
 {\bf Системный вызов} & {\bf Описание} \\
 \midrule
-int fork() & Создает новый процесс, возвращает идентификатор \\
-           & дочернего процесса. \\
-int exit(int status) & Завершает текущий процесс; статус возврата считывается \\
-                     & вызовом wait(). Функция не возвращается. \\
-int wait(int *status) & Ждет завершения дочернего процесса; статус возврата \\
-                      & ребенка помещается в *status. Возвращает идентификатор \\
-                      & процесса завершившегося ребенка. \\
-int kill(int pid) & Terminate process PID. Returns 0, or -1 for error. \\
-int getpid() & Return the current process's PID. \\
-int sleep(int n) & Pause for n clock ticks. \\
-int exec(char *file, char *argv[]) & Load a file and execute it with arguments; only returns if error. \\
-char *sbrk(int n) & Grow process's memory by n bytes. Returns start of new memory. \\
-int open(char *file, int flags) & Open a file; flags indicate read/write; returns an fd (file descriptor). \\
-int write(int fd, char *buf, int n) & Write n bytes from buf to file descriptor fd; returns n. \\
-int read(int fd, char *buf, int n) & Read n bytes into buf; returns number read; or 0 if end of file. \\
-int close(int fd) & Release open file fd. \\
-int dup(int fd) & Return a new file descriptor referring to the same file as fd.\\
-int pipe(int p[]) & Create a pipe, put read/write file descriptors in p[0] and p[1]. \\
-int chdir(char *dir) & Change the current directory. \\
+\midrule
+int fork() & Создает новый процесс, родителю возвращает \\
+           & идентификатор дочернего процесса. У ребенка \\
+           & статус возврата - 0. \\
+\midrule
+int exit(int status) & Завершает текущий процесс; статус возврата \\
+                     & считывается вызовом wait(). Функция не \\
+                     & возвращается. \\
+\midrule
+int wait(int *status) & Ждет завершения дочернего процесса; статус \\
+                      & возврата ребенка помещается в *status. Возвращает \\
+                      & идентификатор процесса завершившегося ребенка. \\
+\midrule
+int kill(int pid) & Завершает процесс с идентификатором PID, \\
+                  & возвращает 0, или -1 при ошибке. \\
+\midrule
+int getpid() & Возвращает идентификатор текущего процесса. \\
+\midrule
+int sleep(int n) & Останавливает исполнение на n системных тактов. \\
+\midrule
+int exec(char *file, char *argv[]) & Загрузить исполняемый файл и запустить его с \\
+                                   & аргументами. Функция возвращается только при \\
+                                   & ошибке. \\
+\midrule
+char *sbrk(int n) & Увеличивает размер пренадлежащей процессу \\
+                  & памяти на n байт. Возвращает старую границу \\
+                  & (которая теперь является началом нового \\
+                  & предоставленного участка памяти). \\
+\midrule
+int open(char *file, int flags) & Открывает файл с заданными флагами, возвращает \\
+                                & дескриптор открытого файла, или -1 при ошибке. \\
+\midrule
+int write(int fd, char *buf, int n) & Записывает n байт из буфера в файловый \\
+                                    & дескриптор fd. Возвращает количество записанных \\
+                                    & байт, или -1 при ошибке. \\
+\midrule
+int read(int fd, char *buf, int n) & Считывает из файлового дескриптора fd в буфер n \\
+                                   & байт. Возвращает количество записанных байт, 0 \\
+                                   & если достигнут конец файла, или -1 при ошибке. \\
+\midrule
+int close(int fd) & Закрывает файл, и освобождает дескриптор fd. \\
+\midrule
+int dup(int fd) & Возвращает новый дескриптор, ссылающийся на \\
+                & то же место в файле что и fd.\\
+\midrule
+int pipe(int p[]) & Создает безымянный канал между двумя \\
+                  & дескрипторами, помещает созданные декскрипторы на чтение/запись в p[0]/p[1]. \\
+\midrule
+int chdir(char *dir) & Изменяет текущую рабочую директорию. \\
+\midrule
 int mkdir(char *dir) & Create a new directory. \\
+\midrule
 int mknod(char *file, int, int) & Create a device file. \\
+\midrule
 int fstat(int fd, struct stat *st) & Place info about an open file into *st. \\
+\midrule
 int stat(char *file, struct stat *st) & Place info about a named file into *st. \\
+\midrule
 int link(char *file1, char *file2) & Create another name (file2) for the file file1. \\
+\midrule
 int unlink(char *file) & Remove a file. \\
+\midrule
 \end{tabular}
 \caption{Xv6 system calls. If not otherwise stated, these calls return
 0 for no error, and -1 if there's an error.}
@@ -240,6 +277,7 @@ The original and new processes are often called the
 and
 \indextext{child}.
 
+\iffalse
 For example, consider the following program fragment written in the C
 programming language~\cite{kernighan}:
 \begin{lstlisting}[]
@@ -1162,3 +1200,5 @@ of pipes, one for each direction. Measure the
 program's performance, in exchanges per second.
 
 \end{enumerate}
+
+\fi
