@@ -187,78 +187,86 @@ xv6 сохраняет регистры ЦП процесса,
 Другие процессы находятся в состоянии ожидания
 до тех пор пока ядро не решит переключить исполнение на них.
 
-\begin{figure}[t]
-\center
-\begin{tabular}{ll}
-{\bf Системный вызов} & {\bf Описание} \\
-\midrule
-\midrule
+\begin{longtable}[c]{l|l}
+  \caption{Long table caption.\label{long}}\\
+
+  \hline
+  Something & something else\\
+  \hline\hline
+  \endfirsthead
+
+  \hline
+  Something & something else\\
+  \hline
+  \endhead
+
+  \hline
+  \endfoot
+
+
 int fork() & Создает новый процесс, родителю возвращает \\
            & идентификатор дочернего процесса. У ребенка \\
            & статус возврата - 0. \\
-\midrule
+\hline
 int exit(int status) & Завершает текущий процесс; статус возврата \\
                      & считывается вызовом wait(). Функция не \\
                      & возвращается. \\
-\midrule
+\hline
 int wait(int *status) & Ждет завершения дочернего процесса; статус \\
-                      & возврата ребенка помещается в *status. Возвращает \\
-                      & идентификатор процесса завершившегося ребенка. \\
-\midrule
+                      & возврата ребенка помещается в *status. \\
+                      & Возвращает идентификатор процесса завершившегося ребенка. \\
+\hline
 int kill(int pid) & Завершает процесс с идентификатором PID, \\
                   & возвращает 0, или -1 при ошибке. \\
-\midrule
+\hline
 int getpid() & Возвращает идентификатор текущего процесса. \\
-\midrule
+\hline
 int sleep(int n) & Останавливает исполнение на n системных тактов. \\
-\midrule
+\hline
 int exec(char *file, char *argv[]) & Загрузить исполняемый файл и запустить его с \\
                                    & аргументами. Функция возвращается только при \\
                                    & ошибке. \\
-\midrule
+\hline
 char *sbrk(int n) & Увеличивает размер пренадлежащей процессу \\
                   & памяти на n байт. Возвращает старую границу \\
                   & (которая теперь является началом нового \\
                   & предоставленного участка памяти). \\
-\midrule
+\hline
 int open(char *file, int flags) & Открывает файл с заданными флагами, возвращает \\
                                 & дескриптор открытого файла, или -1 при ошибке. \\
-\midrule
+\hline
 int write(int fd, char *buf, int n) & Записывает n байт из буфера в файловый \\
                                     & дескриптор fd. Возвращает количество записанных \\
                                     & байт, или -1 при ошибке. \\
-\midrule
+\hline
 int read(int fd, char *buf, int n) & Считывает из файлового дескриптора fd в буфер n \\
                                    & байт. Возвращает количество записанных байт, 0 \\
                                    & если достигнут конец файла, или -1 при ошибке. \\
-\midrule
+\hline
 int close(int fd) & Закрывает файл, и освобождает дескриптор fd. \\
-\midrule
+\hline
 int dup(int fd) & Возвращает новый дескриптор, ссылающийся на \\
                 & то же место в файле что и fd.\\
-\midrule
+\hline
 int pipe(int p[]) & Создает безымянный канал между двумя \\
-                  & дескрипторами, помещает созданные декскрипторы на чтение/запись в p[0]/p[1]. \\
-\midrule
-int chdir(char *dir) & Изменяет текущую рабочую директорию. \\
-\midrule
-int mkdir(char *dir) & Create a new directory. \\
-\midrule
-int mknod(char *file, int, int) & Create a device file. \\
-\midrule
-int fstat(int fd, struct stat *st) & Place info about an open file into *st. \\
-\midrule
+                  & дескрипторами, помещает созданные декскрипторы \\
+                  & на чтение/запись в p[0]/p[1]. \\
+\hline
+int chdir(char *dir)                  & Изменяет текущую рабочую директорию. \\
+\hline
+int mkdir(char *dir)                  & Create a new directory. \\
+\hline
+int mknod(char *file, int, int)       & Create a device file. \\
+\hline
+int fstat(int fd, struct stat *st)    & Place info about an open file into *st. \\
+\hline
 int stat(char *file, struct stat *st) & Place info about a named file into *st. \\
-\midrule
-int link(char *file1, char *file2) & Create another name (file2) for the file file1. \\
-\midrule
-int unlink(char *file) & Remove a file. \\
-\midrule
-\end{tabular}
-\caption{Xv6 system calls. If not otherwise stated, these calls return
-0 for no error, and -1 if there's an error.}
-\label{fig:api}
-\end{figure}
+\hline
+int link(char *file1, char *file2)    & Create another name (file2) for the file file1. \\
+\hline
+int unlink(char *file)                & Remove a file. \\
+\hline
+\end{longtable}
 
 A process may create a new process using the
 \indexcode{fork}
