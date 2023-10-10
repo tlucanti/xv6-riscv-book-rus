@@ -179,7 +179,7 @@ xv6 имеет традиционную форму ядра \emph{(англ. ker
 xv6 сохраняет регистры ЦП процесса,
 восстанавливая их при следующем запуске процесса.
 Каждому процессу соответствует уникальный идентификатор процесса
-(англ. PID - process identifier)
+\emph{(англ. PID - process identifier)}
 \index{идентификатор процесса}
 \index{process identifier}
 \index{PID}
@@ -188,104 +188,111 @@ xv6 сохраняет регистры ЦП процесса,
 до тех пор пока ядро не решит переключить исполнение на них.
 
 \begin{longtable}[c]{l|l}
-  \caption{Long table caption.\label{long}}\\
+\caption{Long table caption.\label{long}}\\
 
-  \hline
-  Something & something else\\
-  \hline\hline
-  \endfirsthead
+\hline
+Системный вызов & описание \\
+\hline\hline
+\endfirsthead
 
-  \hline
-  Something & something else\\
-  \hline
-  \endhead
+\hline
+Системный вызов & описание \\
+\hline
+\endhead
 
-  \hline
-  \endfoot
+\hline
+\endfoot
 
 
-int fork() & Создает новый процесс, родителю возвращает \\
-           & идентификатор дочернего процесса. У ребенка \\
-           & статус возврата - 0. \\
+int fork()                              & Создает новый процесс, родителю возвращает \\
+                                        & идентификатор дочернего процесса. У ребенка \\
+                                        & статус возврата - 0. \\
 \hline
-int exit(int status) & Завершает текущий процесс; статус возврата \\
-                     & считывается вызовом wait(). Функция не \\
-                     & возвращается. \\
+int exit(int status)                    & Завершает текущий процесс; статус возврата \\
+                                        & считывается вызовом wait(). Функция не \\
+                                        & возвращается. \\
 \hline
-int wait(int *status) & Ждет завершения дочернего процесса; статус \\
-                      & возврата ребенка помещается в *status. \\
-                      & Возвращает идентификатор процесса завершившегося ребенка. \\
+int wait(int *status)                   & Ждет завершения дочернего процесса; статус \\
+                                        & возврата ребенка помещается в *status. \\
+                                        & Возвращает идентификатор процесса \\
+                                        & завершившегося ребенка. \\
 \hline
-int kill(int pid) & Завершает процесс с идентификатором PID, \\
-                  & возвращает 0, или -1 при ошибке. \\
+int kill(int pid)                       & Завершает процесс с идентификатором PID, \\
+                                        & возвращает 0, или -1 при ошибке. \\
 \hline
-int getpid() & Возвращает идентификатор текущего процесса. \\
+int getpid()                            & Возвращает идентификатор текущего процесса. \\
 \hline
-int sleep(int n) & Останавливает исполнение на n системных тактов. \\
+int sleep(int n)                        & Останавливает исполнение на n системных \\
+                                        & тактов. \\
 \hline
-int exec(char *file, char *argv[]) & Загрузить исполняемый файл и запустить его с \\
-                                   & аргументами. Функция возвращается только при \\
-                                   & ошибке. \\
+int exec(char *file, char *argv[])      & Загрузить исполняемый файл и запустить его с \\
+                                        & аргументами. Функция возвращается только при \\
+                                        & ошибке. \\
 \hline
-char *sbrk(int n) & Увеличивает размер пренадлежащей процессу \\
-                  & памяти на n байт. Возвращает старую границу \\
-                  & (которая теперь является началом нового \\
-                  & предоставленного участка памяти). \\
+char *sbrk(int n)                       & Увеличивает размер пренадлежащей процессу \\
+                                        & памяти на n байт. Возвращает старую границу \\
+                                        & (которая теперь является началом нового \\
+                                        & предоставленного участка памяти). \\
 \hline
-int open(char *file, int flags) & Открывает файл с заданными флагами, возвращает \\
-                                & дескриптор открытого файла, или -1 при ошибке. \\
+int open(char *file, int flags)         & Открывает файл с заданными флагами, \\
+                                        & возвращает дескриптор открытого файла, или -1 \\
+                                        & при ошибке. \\
 \hline
-int write(int fd, char *buf, int n) & Записывает n байт из буфера в файловый \\
-                                    & дескриптор fd. Возвращает количество записанных \\
-                                    & байт, или -1 при ошибке. \\
+int write(int fd, char *buf, int n)     & Записывает n байт из буфера в файловый \\
+                                        & дескриптор fd. Возвращает количество \\
+                                        & записанных байт, или -1 при ошибке. \\
 \hline
-int read(int fd, char *buf, int n) & Считывает из файлового дескриптора fd в буфер n \\
-                                   & байт. Возвращает количество записанных байт, 0 \\
-                                   & если достигнут конец файла, или -1 при ошибке. \\
+int read(int fd, char *buf, int n)    & Считывает из файлового дескриптора fd в буфер \\
+                                      & n байт. Возвращает количество записанных байт, \\
+                                      & 0 если достигнут конец файла, или -1 \\
+                                      & при ошибке. \\
 \hline
-int close(int fd) & Закрывает файл, и освобождает дескриптор fd. \\
+int close(int fd)                     & Закрывает файл, и освобождает дескриптор fd. \\
 \hline
-int dup(int fd) & Возвращает новый дескриптор, ссылающийся на \\
-                & то же место в файле что и fd.\\
+int dup(int fd)                       & Возвращает новый дескриптор, ссылающийся на \\
+                                      & то же место в файле что и fd.\\
 \hline
-int pipe(int p[]) & Создает безымянный канал между двумя \\
-                  & дескрипторами, помещает созданные декскрипторы \\
-                  & на чтение/запись в p[0]/p[1]. \\
+int pipe(int p[])                     & Создает безымянный канал между двумя \\
+                                      & дескрипторами, помещает созданные декскрипторы \\
+                                      & на чтение/запись в p[0]/p[1]. \\
 \hline
 int chdir(char *dir)                  & Изменяет текущую рабочую директорию. \\
 \hline
-int mkdir(char *dir)                  & Create a new directory. \\
+int mkdir(char *dir)                  & Создает новую директорию. \\
 \hline
-int mknod(char *file, int, int)       & Create a device file. \\
+int mknod(char *file, int, int)       & Создает новый файл устройства. \\
 \hline
-int fstat(int fd, struct stat *st)    & Place info about an open file into *st. \\
+int fstat(int fd, struct stat *st)    & Помещает информацию об открытом файле с \\
+                                      & дескриптором fd в структуру по указателю st. \\
 \hline
-int stat(char *file, struct stat *st) & Place info about a named file into *st. \\
+int stat(char *file, struct stat *st) & Помещает информацию о файле с именем file \\
+                                      & в структуру по указателю st. \\
 \hline
-int link(char *file1, char *file2)    & Create another name (file2) for the file file1. \\
+int link(char *file1, char *file2)    & Создает альтернативное имя file2 \\
+                                      & (жесткую ссылку) для файла file1. \\
 \hline
-int unlink(char *file)                & Remove a file. \\
+int unlink(char *file)                & Удаляет файл file. \\
 \hline
 \end{longtable}
 
-A process may create a new process using the
-\indexcode{fork}
-system call.
-\lstinline{fork}
-gives the new process an exact copy of the calling
-process's memory,
-both instructions and data.
-\lstinline{fork}
-returns in both the original and new processes.
-In the original process, \lstinline{fork} returns the new process's
-PID.
-In the new process, \lstinline{fork} returns zero.
-The original and new processes are often called the
-\indextext{parent}
-and
-\indextext{child}.
+Процесс может создать новый процесс,
+используя системный вызов \emph{\indexcode{fork}}.
+\indexcode{Fork} предоставляет новому процессу точную копию
+памяти, инструкций, и данных вызывающего процесса.
+\indexcode{Fork} возвращается как в исходном,
+так и в новом процессах.
+В исходном процессе \indexcode{fork} возвращает
+идентификатор созданного процесса.
+В созданном процессе \indexcode{fork} возвращает ноль.
+Исходный и новый процессы обычно называются
+родительским \emph{(англ. parent)}
+и дочерним \emph{(англ. child)}.
+\index{родительский процесс}
+\index{parent process}
+\index{дочерний процесс}
+\index{child process}
 
-\iffalse
+
 For example, consider the following program fragment written in the C
 programming language~\cite{kernighan}:
 \begin{lstlisting}[]
@@ -321,6 +328,7 @@ If the parent doesn't care about the exit status of a child, it can
 pass a 0 address to
 \lstinline{wait}.
 
+\iffalse
 In the example, the output lines
 \begin{lstlisting}[]
 parent: child=1234
